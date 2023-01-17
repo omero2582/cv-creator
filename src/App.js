@@ -5,33 +5,29 @@ import CvOutput from './components/CvOutput';
 class App extends Component {
   constructor (props) {
     super(props);
-    // i think extract everything, so that it is outside cv..
-    // and there is no 'cv'. Bc i dont think its necessary here
     this.state = {
-      cv: {
-        general: {
-          name: '',
-          email: '',
-          phone: '',
-        },
-        educationalExperience: [
-          {
-            schoolName: '',
-            titleOfStudy: '',
-            startDate: '',
-            endDate: '',
-          } 
-        ],
-        workExperience: [
-          {
-            companyName: '',
-            positionTitle:'',
-            mainTasks:'',
-            startDate: '',
-            endDate: '',
-          }
-        ]
-      }
+      general: {
+        name: '',
+        email: '',
+        phone: '',
+      },
+      eduExperience: [
+        {
+          schoolName: '',
+          titleOfStudy: '',
+          startDate: '',
+          endDate: '',
+        } 
+      ],
+      workExperience: [
+        {
+          companyName: '',
+          positionTitle:'',
+          mainTasks:'',
+          startDate: '',
+          endDate: '',
+        }
+      ]
     };
   }
 
@@ -41,23 +37,31 @@ class App extends Component {
   };
 
   // having to write 12 of these seems like is wrong...
-  inputName = (e, nameIn) => {
-    this.setState((state) => ({
-      cv: {
-        ...state.cv,
-        general: {
-          ...state.cv.general,
-          name: nameIn,
+  input= (e, property) => {
+    // const property = 'general.name';
+    const [prop1, prop2] = property.split('.');
+    this.setState((state) => {
+      // const newProp1 = {...state[prop1]};
+      // newProp1[prop2] = e.target.value;
+      // return {...state, [prop1]: newProp1}
+      
+      // --- method 2 BETTER --- NOW USING THIS WOKRING PERFECTLY
+      // HOWEVER, i now noticed this will only work for general...
+      // since workExp and schoolExp are arrays
+      return  {
+        [prop1]: {
+          ...state[prop1],
+          [prop2]: e.target.value,
         }
       }
-    }))
+    })
   };
 
   render() {
     return (
       <div className="App">
-        <CvInput onSubmit = {this.submitCv}/>
-        <CvOutput cv={this.state.cv}/>
+        <CvInput cv={this.state} onSubmit={this.submitCv} input={this.input}/>
+        <CvOutput cv={this.state}/>
       </div>
     );
   }

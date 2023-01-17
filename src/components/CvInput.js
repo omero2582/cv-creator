@@ -2,19 +2,21 @@ import React, {Component} from 'react'
 
 class CvInput extends Component {
   render() {
-    const {onSubmit} = this.props;
+    // TODO TODO ... after  perfecting my input handler function, i now realize
+    // that I will need something different for schoolExp and workExp, since they are arrays
+    const {cv, onSubmit, input} = this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
           <fieldset>
             <legend>General</legend>
             <label>Name:
-              <input></input>
+              <input value={cv.general.name} onChange={(e) => input(e, 'general.name')}></input>
             </label>
             <label>Email:
-              <input type='email'></input>
+              <input type='email' value={cv.general.email} onChange={(e) => input(e, 'general.email')}></input>
             </label>
             <label>Phone #:
-              <input type='tel'></input>
+              <input type='tel' value={cv.general.phone} onChange={(e) => input(e, 'general.phone')}></input>
             </label>
           </fieldset>
           <fieldset>
