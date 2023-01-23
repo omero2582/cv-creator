@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
+import EducationalExp from './EducationalExp';
+import WorkExp from './WorkExp';
 
 class CvInput extends Component {
   render() {
     // TODO TODO ... after  perfecting my input handler function, i now realize
-    // that I will need something different for schoolExp and workExp, since they are arrays
-    const {cv, onSubmit, input} = this.props;
+    // that I will need something different for schoolExps and workExps, since they are arrays
+    const {cv, onSubmit, input, newEd} = this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
           <fieldset>
@@ -20,34 +22,14 @@ class CvInput extends Component {
             </label>
           </fieldset>
           <fieldset>
-            <legend>Educational Experience</legend>
-            <label>School Name:
-              <input></input>
-            </label>
-            <label>Title of Study:
-              <input></input>
-            </label>
-            <label>Start Date:
-              <input type='number'></input>
-            </label>
-            <label>End Date:
-              <input type='number'></input>
-            </label>
+            <legend>Educational Experiences</legend>
+            {cv.educationalExps.map((exp) => <EducationalExp key={exp.id}/>)}
+            <button type='button' onClick={newEd}>New Experience</button>
           </fieldset>
           <fieldset>
-            <legend>Work Experience</legend>
-            <label>Company Name:
-              <input></input>
-            </label>
-            <label>Position Title:
-              <input></input>
-            </label>
-            <label>Start Date:
-              <input type='number'></input>
-            </label>
-            <label>End Date:
-              <input type='number'></input>
-            </label>
+            <legend>Work Experiences</legend>
+            {cv.workExps.map((exp) => <WorkExp key={exp.id}/>)}
+            <button type='button'>New Experience</button>
           </fieldset>
           <button>Submit</button>
         </form>
