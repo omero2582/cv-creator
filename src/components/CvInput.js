@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import EducationExp from './EducationExp';
-import WorkExp from './WorkExp';
+import Education from './Education';
+import Work from './Work';
 
 class CvInput extends Component {
   render() {
     // TODO TODO ... after  perfecting my input handler function, i now realize
-    // that I will need something different for schoolExps and workExps, since they are arrays
-    const {cv, onSubmit, onInput, onNewEdu, onNewWork} = this.props;
+    // that I will need something different for schoolExps and workArr, since they are arrays
+    const {cv, onSubmit, onInput, onNewEducation, onNewWork, onInputEducation, onInputWork} = this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
           <fieldset>
@@ -23,12 +23,14 @@ class CvInput extends Component {
           </fieldset>
           <fieldset>
             <legend>Educational Experiences</legend>
-            {cv.educationExps.map((exp) => <EducationExp key={exp.id}/>)}
-            <button type='button' onClick={onNewEdu}>New Experience</button>
+            {cv.educationsArr.map((education) => {
+             return <Education key={education.id} info={education} onInput={onInputEducation}/> 
+            })}
+            <button type='button' onClick={onNewEducation}>New Experience</button>
           </fieldset>
           <fieldset>
             <legend>Work Experiences</legend>
-            {cv.workExps.map((exp) => <WorkExp key={exp.id}/>)}
+            {cv.workArr.map((work) => <Work key={work.id} info={work} onInput={onInputWork}/>)}
             <button type='button' onClick={onNewWork}>New Experience</button>
           </fieldset>
           <button>Submit</button>

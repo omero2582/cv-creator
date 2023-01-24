@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-class EducationExp extends Component {
+class Education extends Component {
   render(){
     return (
      <fieldset>
@@ -22,4 +22,4 @@ class EducationExp extends Component {
    
 }
 
-export default EducationExp
+export default Education

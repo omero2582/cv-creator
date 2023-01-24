@@ -4,14 +4,14 @@ import CvInput from './components/CvInput';
 import CvOutput from './components/CvOutput';
 
 class App extends Component {
-  newEduExp = {
+  educationNew = {
     id: crypto.randomUUID(),
     schoolName: '',
     titleOfStudy: '',
     startDate: '',
     endDate: '',
   };
-  newWorkExp = {
+  workNew = {
     id: crypto.randomUUID(),
     companyName: '',
     positionTitle:'',
@@ -26,23 +26,23 @@ class App extends Component {
       email: '',
       phone: '',
     },
-    educationExps: [{...this.newEduExp}],
-    workExps: [{...this.newWorkExp}]
+    educationsArr: [{...this.educationNew}],
+    workArr: [{...this.workNew}]
   };
 
-  handleNewEducationExp = () => {
-    const newExp = {...this.newEduExp, id: crypto.randomUUID()};
+  handleNewEducation = () => {
+    const newEdu = {...this.educationNew, id: crypto.randomUUID()};
     this.setState((state) => 
       ({
-        educationExps: [...state.educationExps, newExp]
+        educationsArr: [...state.educationsArr, newEdu]
       }));
   };
 
-  handleNewWorkExp = () => {
-    const newExp = {...this.newWorkExp, id: crypto.randomUUID()};
+  handleNewWork = () => {
+    const newExp = {...this.workNew, id: crypto.randomUUID()};
     this.setState((state) => 
       ({
-        workExps: [...state.workExps, newExp]
+        workArr: [...state.workArr, newExp]
       }));
   };
 
@@ -69,7 +69,46 @@ class App extends Component {
         }
       }
     })
+    // TODO TODO, will take out the necessity to write 'general.abc', since we can only use
+    // this function for general. So simply expect 'abc' in parameter instead of 'general.abc'
   };
+
+  handleInputWorkEducation = (e,  id, workOrEducation, prop1) => {
+    // for work or education inputs
+    const arr  = workOrEducation === 'work' ? 'workArr' : 'educationsArr';
+    this.setState((state) => {
+      return  {
+        [arr]: state[arr].map((item) => {
+          if (item.id !== id) {
+            return item
+          }
+          return {
+            ...item,
+            [prop1]: e.target.value,
+          };
+        }),
+      };
+    });
+    /* Works perfectly, but HMMM... maybe there is a simpler/more readable way to write this...
+      if I use .map like i am, then Im 99% sure HAVE TO do it this exact way
+      I wouldn't be able to write .map((item) => (item.id !== id) ? item : newObj)
+      since that newObj uses item... but maybe i can just write instead of newObj:
+      {
+        ...item,
+        [prop1]: e.target.value,
+      }
+    nahhhh, this would defeat the purpose of using ternary operator... whole point of using it over if/else
+    is to get it all in one line. Guess im stuck with if else.
+    
+    2. Other option is to use .findIndex and 2 slices or array spread operator. But the problem with this
+    is Im pretty sure I would loop through the array at least 1 extra time, compared to .map()...
+    I think I need to just write the code for this method, and then compare how it to .map(). Thats the best
+    way to tell if its good bc its hard to keep imagine it in my head perfectly
+    */
+  };
+
+  handleInputWork = (e, id, prop1) => this.handleInputWorkEducation(e, id, 'work', prop1);
+  handleInputEducation = (e, id, prop1) => this.handleInputWorkEducation(e, id, 'education', prop1);
 
   render() {
     return (
@@ -78,8 +117,10 @@ class App extends Component {
           cv={this.state}
           onSubmit={this.handleSubmit}
           onInput={this.handleInput}
-          onNewEdu={this.handleNewEducationExp}
-          onNewWork={this.handleNewWorkExp}
+          onInputWork={this.handleInputWork}
+          onInputEducation={this.handleInputEducation}
+          onNewEducation={this.handleNewEducation}
+          onNewWork={this.handleNewWork}
           />
         <CvOutput cv={this.state}/>
       </div>
