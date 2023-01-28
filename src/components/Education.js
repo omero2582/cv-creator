@@ -5,16 +5,16 @@ class Education extends Component {
     return (
      <fieldset>
      <label>School Name:
-     <input></input>
+      <input></input>
      </label>
      <label>Title of Study:
-     <input></input>
+      <input></input>
      </label>
      <label>Start Date:
-     <input type='number'></input>
+      <input type='number'></input>
      </label>
      <label>End Date:
-     <input type='number'></input>
+      <input type='number'></input>
      </label>
    </fieldset>
     )

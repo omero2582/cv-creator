@@ -7,7 +7,7 @@ class Work extends Component {
     startDate: '',
     endDate: '', */
   render(){
-    const { info, onInput } = this.props;
+    const { info, onInput, onDelete } = this.props;
     return (
      <fieldset>
      <label>Company Name:
@@ -22,6 +22,7 @@ class Work extends Component {
     <label>End Date:
       <input type='number' value={info.endDate} onChange={(e) => onInput(e, info.id, 'endDate')}></input>
     </label>
+    <button type='button' onClick={() => onDelete(info.id)}>Delete</button>
    </fieldset>
     )
    }

@@ -26,7 +26,7 @@ class App extends Component {
       email: '',
       phone: '',
     },
-    educationsArr: [{...this.educationNew}],
+    educationArr: [{...this.educationNew}],
     workArr: [{...this.workNew}]
   };
 
@@ -34,7 +34,7 @@ class App extends Component {
     const newEdu = {...this.educationNew, id: crypto.randomUUID()};
     this.setState((state) => 
       ({
-        educationsArr: [...state.educationsArr, newEdu]
+        educationArr: [...state.educationArr, newEdu]
       }));
   };
 
@@ -45,50 +45,100 @@ class App extends Component {
         workArr: [...state.workArr, newExp]
       }));
   };
+  // TODO these 2 above functions look the same, I should extract into a general fn maybe probably
 
   handleSubmit = (e) => {
     e.preventDefault();
     console.log('test');
   };
 
-  componentDidMount() {
-    console.log('mount ' + new Date().toLocaleTimeString());
-    // componentDidMount gets called twice because of <StrictMode>,
-    // which we can disable... but then what is the point of strict mode if we are just disabling
-  }
-
-  // having to write 12 of these seems like is wrong...
-  handleInput = (e, property) => {
-    // const property = 'general.name';
-    const [prop1, prop2] = property.split('.');
+  // for inputs in general
+  handleInputObj = (e, objName, prop1) => {
     this.setState((state) => {
       return  {
-        [prop1]: {
-          ...state[prop1],
-          [prop2]: e.target.value,
+        [objName]: {
+          ...state[objName],
+          [prop1]: e.target.value,
         }
       }
     })
-    // TODO TODO, will take out the necessity to write 'general.abc', since we can only use
-    // this function for general. So simply expect 'abc' in parameter instead of 'general.abc'
   };
 
-  handleInputWorkEducation = (e,  id, workOrEducation, prop1) => {
-    // for work or education inputs
-    const arr  = workOrEducation === 'work' ? 'workArr' : 'educationsArr';
-    this.setState((state) => {
-      return  {
-        [arr]: state[arr].map((item) => {
-          if (item.id !== id) {
-            return item
-          }
-          return {
-            ...item,
-            [prop1]: e.target.value,
-          };
-        }),
-      };
+  handleInputArr2 = (e, id, arrName, prop1) => {
+    const updateArray = (array, id, prop1, value) => {
+      const itemIndex = array.findIndex(item => item.id === id);
+      return [
+        ...array.slice(0, itemIndex),
+        { ...array[itemIndex], [prop1]: value },
+        ...array.slice(itemIndex + 1)
+      ];
+    };
+  
+    this.setState(state => ({
+      [arrName]: updateArray(state[arrName], id, prop1, e.target.value)
+    }));
+  }
+
+  handleInputArr3 = (e, id, arrName, prop1) => {
+    this.setState(state => {
+      const itemIndex = state[arrName].findIndex(item => item.id === id);
+      return {
+        [arrName]: [
+          ...state[arrName].slice(0, itemIndex),
+          { ...state[arrName][itemIndex], [prop1]: e.target.value },
+          ...state[arrName].slice(itemIndex + 1)
+        ]
+      }
     });
+  }
+
+  handleInputArr4 = (e,  id, arrName, prop1) => {
+    // for work or education arrays
+    this.setState((state) => {
+      const newArray = state[arrName].map((item) => {
+        if (item.id !== id) {
+          return item
+        }
+        return {
+          ...item,
+          [prop1]: e.target.value,
+        };
+      });
+      return  {
+        [arrName]: newArray 
+      }
+    });
+  }
+
+  handleInputArr5 = (e,  id, arrName, prop1) => {
+    // for work or education arrays
+    this.setState((state) => {
+      return ({
+        [arrName]: state[arrName].map((item) => (item.id !== id) 
+        ? item 
+        : {
+          ...item,
+          [prop1]: e.target.value,
+        })
+      })
+    });
+  }
+
+    handleInputArr = (e,  id, arrName, prop1) => {
+      // for work or education arrays
+      this.setState((state) => {
+        return  {
+          [arrName]: state[arrName].map((item) => {
+            if (item.id !== id) {
+              return item
+            }
+            return {
+              ...item,
+              [prop1]: e.target.value,
+            };
+          }),
+        };
+      });
     /* Works perfectly, but HMMM... maybe there is a simpler/more readable way to write this...
       if I use .map like i am, then Im 99% sure HAVE TO do it this exact way
       I wouldn't be able to write .map((item) => (item.id !== id) ? item : newObj)
@@ -107,8 +157,19 @@ class App extends Component {
     */
   };
 
-  handleInputWork = (e, id, prop1) => this.handleInputWorkEducation(e, id, 'work', prop1);
-  handleInputEducation = (e, id, prop1) => this.handleInputWorkEducation(e, id, 'education', prop1);
+  handleDeleteArr = (id, arrName) => {
+    this.setState((state) => {
+      return {
+        [arrName]: state[arrName].filter(obj => obj.id !== id)
+      }
+    })
+  };
+
+  handleInputGeneral = (e, prop1) => this.handleInputObj(e, 'general', prop1);
+  handleInputEducation = (e, id, prop1) => this.handleInputArr(e, id, 'educationArr', prop1);
+  handleInputWork = (e, id, prop1) => this.handleInputArr(e, id, 'workArr', prop1);
+  handleDeleteEducation = (id) => this.handleDeleteArr(id, 'educationArr');
+  handleDeleteWork = (id) => this.handleDeleteArr(id, 'workArr');
 
   render() {
     return (
@@ -116,11 +177,13 @@ class App extends Component {
         <CvInput
           cv={this.state}
           onSubmit={this.handleSubmit}
-          onInput={this.handleInput}
+          onInputGeneral={this.handleInputGeneral}
           onInputWork={this.handleInputWork}
           onInputEducation={this.handleInputEducation}
           onNewEducation={this.handleNewEducation}
           onNewWork={this.handleNewWork}
+          onDeleteEducation={this.handleDeleteEducation}
+          onDeleteWork={this.handleDeleteWork}
           />
         <CvOutput cv={this.state}/>
       </div>
