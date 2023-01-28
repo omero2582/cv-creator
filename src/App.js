@@ -64,100 +64,54 @@ class App extends Component {
     })
   };
 
-  handleInputArr2 = (e, id, arrName, prop1) => {
-    const updateArray = (array, id, prop1, value) => {
-      const itemIndex = array.findIndex(item => item.id === id);
-      return [
-        ...array.slice(0, itemIndex),
-        { ...array[itemIndex], [prop1]: value },
-        ...array.slice(itemIndex + 1)
-      ];
-    };
-  
-    this.setState(state => ({
-      [arrName]: updateArray(state[arrName], id, prop1, e.target.value)
+
+  // updateArray = (array, id, prop1, value) => {
+  //   const itemIndex = array.findIndex(item => item.id === id);
+  //   return [
+  //     ...array.slice(0, itemIndex),
+  //     { ...array[itemIndex], [prop1]: value },
+  //     ...array.slice(itemIndex + 1)
+  //   ];
+  // };
+  //
+
+  updateArray = (array, id, prop1, value) => (
+    array.map((item) => {
+      if (item.id !== id) {
+        return item
+      }
+      return {
+        ...item,
+        [prop1]: value,
+      }
+    })
+  )
+
+  handleInputArr = (e, arrName, id, prop1) => {
+    console.log(arrName);
+    this.setState((state) => ({
+      [arrName]: this.updateArray(state[arrName], id, prop1, e.target.value)
     }));
   }
 
-  handleInputArr3 = (e, id, arrName, prop1) => {
-    this.setState(state => {
-      const itemIndex = state[arrName].findIndex(item => item.id === id);
-      return {
-        [arrName]: [
-          ...state[arrName].slice(0, itemIndex),
-          { ...state[arrName][itemIndex], [prop1]: e.target.value },
-          ...state[arrName].slice(itemIndex + 1)
-        ]
-      }
-    });
-  }
+  // handleInputArr = (e, arrName, id, prop1) => {
+  //   // for work or education arrays
+  //   this.setState((state) => {
+  //     return  {
+  //       [arrName]: state[arrName].map((item) => {
+  //         if (item.id !== id) {
+  //           return item
+  //         }
+  //         return {
+  //           ...item,
+  //           [prop1]: e.target.value,
+  //         };
+  //       }),
+  //     };
+  //   });
+  // };
 
-  handleInputArr4 = (e,  id, arrName, prop1) => {
-    // for work or education arrays
-    this.setState((state) => {
-      const newArray = state[arrName].map((item) => {
-        if (item.id !== id) {
-          return item
-        }
-        return {
-          ...item,
-          [prop1]: e.target.value,
-        };
-      });
-      return  {
-        [arrName]: newArray 
-      }
-    });
-  }
-
-  handleInputArr5 = (e,  id, arrName, prop1) => {
-    // for work or education arrays
-    this.setState((state) => {
-      return ({
-        [arrName]: state[arrName].map((item) => (item.id !== id) 
-        ? item 
-        : {
-          ...item,
-          [prop1]: e.target.value,
-        })
-      })
-    });
-  }
-
-    handleInputArr = (e,  id, arrName, prop1) => {
-      // for work or education arrays
-      this.setState((state) => {
-        return  {
-          [arrName]: state[arrName].map((item) => {
-            if (item.id !== id) {
-              return item
-            }
-            return {
-              ...item,
-              [prop1]: e.target.value,
-            };
-          }),
-        };
-      });
-    /* Works perfectly, but HMMM... maybe there is a simpler/more readable way to write this...
-      if I use .map like i am, then Im 99% sure HAVE TO do it this exact way
-      I wouldn't be able to write .map((item) => (item.id !== id) ? item : newObj)
-      since that newObj uses item... but maybe i can just write instead of newObj:
-      {
-        ...item,
-        [prop1]: e.target.value,
-      }
-    nahhhh, this would defeat the purpose of using ternary operator... whole point of using it over if/else
-    is to get it all in one line. Guess im stuck with if else.
-    
-    2. Other option is to use .findIndex and 2 slices or array spread operator. But the problem with this
-    is Im pretty sure I would loop through the array at least 1 extra time, compared to .map()...
-    I think I need to just write the code for this method, and then compare how it to .map(). Thats the best
-    way to tell if its good bc its hard to keep imagine it in my head perfectly
-    */
-  };
-
-  handleDeleteArr = (id, arrName) => {
+  handleDeleteArr = (arrName, id,) => {
     this.setState((state) => {
       return {
         [arrName]: state[arrName].filter(obj => obj.id !== id)
@@ -166,10 +120,10 @@ class App extends Component {
   };
 
   handleInputGeneral = (e, prop1) => this.handleInputObj(e, 'general', prop1);
-  handleInputEducation = (e, id, prop1) => this.handleInputArr(e, id, 'educationArr', prop1);
-  handleInputWork = (e, id, prop1) => this.handleInputArr(e, id, 'workArr', prop1);
-  handleDeleteEducation = (id) => this.handleDeleteArr(id, 'educationArr');
-  handleDeleteWork = (id) => this.handleDeleteArr(id, 'workArr');
+  handleInputEducation = (e, id, prop1) => this.handleInputArr(e, 'educationArr', id, prop1);
+  handleInputWork = (e, id, prop1) => this.handleInputArr(e, 'workArr',  id, prop1);
+  handleDeleteEducation = (id) => this.handleDeleteArr('educationArr', id);
+  handleDeleteWork = (id) => this.handleDeleteArr('workArr', id);
 
   render() {
     return (
