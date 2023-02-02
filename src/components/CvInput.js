@@ -5,16 +5,14 @@ import Work from './Work';
 
 class CvInput extends Component {
   render() {
-    // TODO TODO ... after  perfecting my input handler function, i now realize
-    // that I will need something different for schoolExps and workArr, since they are arrays
-    const {cv, onSubmit, onInputGeneral, onNewEducation, onNewWork, onInputEducation, onInputWork, onDeleteWork} = this.props;
+    const {cv, onSubmit, onInputGeneral, onNewEducation, onNewWork, onInputEducation, onInputWork, onDeleteWork, onDeleteEducation} = this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
           <General  general = {cv.general} onInput={onInputGeneral}/>
           <fieldset>
             <legend>Educational Experiences</legend>
             {cv.educationArr.map((education) => {
-             return <Education key={education.id} info={education} onInput={onInputEducation}/> 
+             return <Education key={education.id} info={education} onInput={onInputEducation} onDelete={onDeleteEducation}/> 
             })}
             <button type='button' onClick={onNewEducation}>New Experience</button>
           </fieldset>

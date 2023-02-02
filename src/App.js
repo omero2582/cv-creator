@@ -32,20 +32,30 @@ class App extends Component {
 
   handleNewEducation = () => {
     const newEdu = {...this.educationNew, id: crypto.randomUUID()};
-    this.setState((state) => 
-      ({
+    this.setState((state) => ({
         educationArr: [...state.educationArr, newEdu]
       }));
   };
 
   handleNewWork = () => {
     const newExp = {...this.workNew, id: crypto.randomUUID()};
-    this.setState((state) => 
-      ({
+    this.setState((state) => ({
         workArr: [...state.workArr, newExp]
       }));
   };
-  // TODO these 2 above functions look the same, I should extract into a general fn maybe probably
+
+  handleNewWork2 = () => {
+    this.setState((state) => ({
+        workArr: [
+          ...state.workArr,
+          {...this.workNew, id: crypto.randomUUID()}
+        ]
+      }));
+  };
+  // TODO these work and education functions above look the same, I could maybe extract them into a general fn
+  // never mind, the are as simple as it gets. It looks like its more than it is, because of the const
+  // that I write on their 1st line. Maybe just remove the variable, and insert it inside the setState
+  // Did this in handleWork2
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -63,7 +73,6 @@ class App extends Component {
       }
     })
   };
-
 
   // updateArray = (array, id, prop1, value) => {
   //   const itemIndex = array.findIndex(item => item.id === id);
@@ -93,23 +102,6 @@ class App extends Component {
       [arrName]: this.updateArray(state[arrName], id, prop1, e.target.value)
     }));
   }
-
-  // handleInputArr = (e, arrName, id, prop1) => {
-  //   // for work or education arrays
-  //   this.setState((state) => {
-  //     return  {
-  //       [arrName]: state[arrName].map((item) => {
-  //         if (item.id !== id) {
-  //           return item
-  //         }
-  //         return {
-  //           ...item,
-  //           [prop1]: e.target.value,
-  //         };
-  //       }),
-  //     };
-  //   });
-  // };
 
   handleDeleteArr = (arrName, id,) => {
     this.setState((state) => {
