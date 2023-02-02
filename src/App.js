@@ -31,20 +31,22 @@ class App extends Component {
   };
 
   handleNewEducation = () => {
-    const newEdu = {...this.educationNew, id: crypto.randomUUID()};
     this.setState((state) => ({
-        educationArr: [...state.educationArr, newEdu]
+        educationArr: [
+          ...state.educationArr,
+          {...this.educationNew, id: crypto.randomUUID()}
+        ]
       }));
   };
+
+  // handleNewWorkOld = () => {
+  //   const newExp = {...this.workNew, id: crypto.randomUUID()};
+  //   this.setState((state) => ({
+  //       workArr: [...state.workArr, newExp]
+  //     }));
+  // };
 
   handleNewWork = () => {
-    const newExp = {...this.workNew, id: crypto.randomUUID()};
-    this.setState((state) => ({
-        workArr: [...state.workArr, newExp]
-      }));
-  };
-
-  handleNewWork2 = () => {
     this.setState((state) => ({
         workArr: [
           ...state.workArr,
@@ -52,10 +54,8 @@ class App extends Component {
         ]
       }));
   };
-  // TODO these work and education functions above look the same, I could maybe extract them into a general fn
-  // never mind, the are as simple as it gets. It looks like its more than it is, because of the const
-  // that I write on their 1st line. Maybe just remove the variable, and insert it inside the setState
-  // Did this in handleWork2
+  // TODO generalize handleNewWork and handleNewEducation. They are both simply adding
+  // a copy of an object to an array in state, so just generalize with 2 parameters
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -116,20 +116,37 @@ class App extends Component {
   handleInputWork = (e, id, prop1) => this.handleInputArr(e, 'workArr',  id, prop1);
   handleDeleteEducation = (id) => this.handleDeleteArr('educationArr', id);
   handleDeleteWork = (id) => this.handleDeleteArr('workArr', id);
+  // TODO. Remove these above, and simple write the contents into the grouped variables
+  // like 'educationFunctions' below. This was only useful before, when we didnt have the grouped vars
 
   render() {
+    const educationFunctions = {
+      onInput: this.handleInputEducation,
+      onNew: this.handleNewEducation,
+      onDelete: this.handleDeleteEducation,
+    };
+    const workFunctions = {
+      onInput: this.handleInputWork,
+      onNew: this.handleNewWork,
+      onDelete: this.handleDeleteWork,
+    };
+    
     return (
       <div className="App">
         <CvInput
           cv={this.state}
           onSubmit={this.handleSubmit}
           onInputGeneral={this.handleInputGeneral}
-          onInputWork={this.handleInputWork}
-          onInputEducation={this.handleInputEducation}
-          onNewEducation={this.handleNewEducation}
-          onNewWork={this.handleNewWork}
-          onDeleteEducation={this.handleDeleteEducation}
-          onDeleteWork={this.handleDeleteWork}
+          educationFunctions={educationFunctions}
+          workFunctions={workFunctions}
+
+          // onInputWork={this.handleInputWork}
+          // onNewWork={this.handleNewWork}
+          // onDeleteWork={this.handleDeleteWork}
+          // onInputEducation={this.handleInputEducation}
+          // onNewEducation={this.handleNewEducation}
+          // onDeleteEducation={this.handleDeleteEducation}
+          
           />
         <CvOutput cv={this.state}/>
       </div>

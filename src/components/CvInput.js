@@ -1,26 +1,29 @@
 import React, {Component} from 'react'
 import General from './General';
-import Education from './Education';
-import Work from './Work';
+import EducationalExperiences from './EducationalExperiences';
+import WorkExperiences from './WorkExperiences';
 
 class CvInput extends Component {
   render() {
-    const {cv, onSubmit, onInputGeneral, onNewEducation, onNewWork, onInputEducation, onInputWork, onDeleteWork, onDeleteEducation} = this.props;
+    const {
+      cv,
+      onSubmit,
+      onInputGeneral,
+      educationFunctions,
+      workFunctions,
+      // onInputEducation,
+      // onNewEducation,
+      // onDeleteEducation,
+      // onInputWork,
+      // onNewWork,
+      // onDeleteWork,
+      
+    }= this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
-          <General  general = {cv.general} onInput={onInputGeneral}/>
-          <fieldset>
-            <legend>Educational Experiences</legend>
-            {cv.educationArr.map((education) => {
-             return <Education key={education.id} info={education} onInput={onInputEducation} onDelete={onDeleteEducation}/> 
-            })}
-            <button type='button' onClick={onNewEducation}>New Experience</button>
-          </fieldset>
-          <fieldset>
-            <legend>Work Experiences</legend>
-            {cv.workArr.map((work) => <Work key={work.id} info={work} onInput={onInputWork} onDelete={onDeleteWork}/>)}
-            <button type='button' onClick={onNewWork}>New Experience</button>
-          </fieldset>
+          <General  general= {cv.general} onInput={onInputGeneral}/>
+          <EducationalExperiences educationArr={cv.educationArr} {...educationFunctions}/>
+          <WorkExperiences workArr={cv.workArr} {...workFunctions}/>
           <button>Submit</button>
         </form>
     )
