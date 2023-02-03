@@ -26,11 +26,6 @@ class Work extends Component {
    </fieldset>
     )
    }
-   // TODO TODO. Now that I look at it, Education and Work both look the same... maybe even General too
-   // But I could probably just write 1 component, and make a Work and an Education out of that 1 component
-   // I dont know if I coould also include General in there
-
-   // Also the only possible problem is all the props that I would have to pass down.....
 }
 
 export default Work

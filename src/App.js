@@ -30,39 +30,13 @@ class App extends Component {
     workArr: [{...this.workNew}]
   };
 
-  handleNewEducation = () => {
-    this.setState((state) => ({
-        educationArr: [
-          ...state.educationArr,
-          {...this.educationNew, id: crypto.randomUUID()}
-        ]
-      }));
-  };
-
-  // handleNewWorkOld = () => {
-  //   const newExp = {...this.workNew, id: crypto.randomUUID()};
-  //   this.setState((state) => ({
-  //       workArr: [...state.workArr, newExp]
-  //     }));
-  // };
-
-  handleNewWork = () => {
-    this.setState((state) => ({
-        workArr: [
-          ...state.workArr,
-          {...this.workNew, id: crypto.randomUUID()}
-        ]
-      }));
-  };
-  // TODO generalize handleNewWork and handleNewEducation. They are both simply adding
-  // a copy of an object to an array in state, so just generalize with 2 parameters
 
   handleSubmit = (e) => {
     e.preventDefault();
     console.log('test');
   };
 
-  // for inputs in general
+  // update object property in state
   handleInputObj = (e, objName, prop1) => {
     this.setState((state) => {
       return  {
@@ -85,50 +59,53 @@ class App extends Component {
   //
 
   updateArray = (array, id, prop1, value) => (
-    array.map((item) => {
-      if (item.id !== id) {
-        return item
+    // In 'array', update the value of object property 'prop1', if object.id == id
+    array.map((object) => {
+      if (object.id !== id) {
+        return object
       }
       return {
-        ...item,
+        ...object,
         [prop1]: value,
       }
     })
   )
 
   handleInputArr = (e, arrName, id, prop1) => {
-    console.log(arrName);
     this.setState((state) => ({
       [arrName]: this.updateArray(state[arrName], id, prop1, e.target.value)
     }));
   }
 
-  handleDeleteArr = (arrName, id,) => {
-    this.setState((state) => {
-      return {
-        [arrName]: state[arrName].filter(obj => obj.id !== id)
-      }
-    })
+  handleNew = (arrName, obj) => {
+    // adds a copy of obj into state[arrName], and gives obj a new obj.id
+    this.setState((state) => ({
+      [arrName]: [
+        ...state[arrName],
+        {...obj, id: crypto.randomUUID()}
+      ]
+    }));
   };
 
-  handleInputGeneral = (e, prop1) => this.handleInputObj(e, 'general', prop1);
-  handleInputEducation = (e, id, prop1) => this.handleInputArr(e, 'educationArr', id, prop1);
-  handleInputWork = (e, id, prop1) => this.handleInputArr(e, 'workArr',  id, prop1);
-  handleDeleteEducation = (id) => this.handleDeleteArr('educationArr', id);
-  handleDeleteWork = (id) => this.handleDeleteArr('workArr', id);
-  // TODO. Remove these above, and simple write the contents into the grouped variables
-  // like 'educationFunctions' below. This was only useful before, when we didnt have the grouped vars
+  handleDeleteArr = (arrName, id,) => {
+    this.setState((state) => ({
+        [arrName]: state[arrName].filter(obj => obj.id !== id)
+      }))
+  };
 
   render() {
-    const educationFunctions = {
-      onInput: this.handleInputEducation,
-      onNew: this.handleNewEducation,
-      onDelete: this.handleDeleteEducation,
+    const generalActions = {
+      onInput: (e, prop1) => this.handleInputObj(e, 'general', prop1),
+    }
+    const educationActions = {
+      onInput: (e, id, prop1) => this.handleInputArr(e, 'educationArr', id, prop1),
+      onNew: () => this.handleNew('educationArr', this.educationNew),
+      onDelete: (id) => this.handleDeleteArr('educationArr', id),
     };
-    const workFunctions = {
-      onInput: this.handleInputWork,
-      onNew: this.handleNewWork,
-      onDelete: this.handleDeleteWork,
+    const workActions = {
+      onInput: (e, id, prop1) => this.handleInputArr(e, 'workArr',  id, prop1),
+      onNew: () => this.handleNew('workArr', this.workNew),
+      onDelete: (id) => this.handleDeleteArr('workArr', id),
     };
     
     return (
@@ -136,18 +113,10 @@ class App extends Component {
         <CvInput
           cv={this.state}
           onSubmit={this.handleSubmit}
-          onInputGeneral={this.handleInputGeneral}
-          educationFunctions={educationFunctions}
-          workFunctions={workFunctions}
-
-          // onInputWork={this.handleInputWork}
-          // onNewWork={this.handleNewWork}
-          // onDeleteWork={this.handleDeleteWork}
-          // onInputEducation={this.handleInputEducation}
-          // onNewEducation={this.handleNewEducation}
-          // onDeleteEducation={this.handleDeleteEducation}
-          
-          />
+          generalActions={generalActions}
+          educationActions={educationActions}
+          workActions={workActions}
+        />
         <CvOutput cv={this.state}/>
       </div>
     );

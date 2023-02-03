@@ -7,9 +7,9 @@ class EducationalExperiences extends Component {
     return (
       <fieldset>
         <legend>Educational Experiences</legend>
-        {educationArr.map((education) => {
-          return <Education key={education.id} info={education} onInput={onInput} onDelete={onDelete}/> 
-        })}
+        {educationArr.map((education) => (
+          <Education key={education.id} info={education} onInput={onInput} onDelete={onDelete}/> 
+        ))}
         <button type='button' onClick={onNew}>New Experience</button>
       </fieldset>
     )

@@ -8,24 +8,17 @@ class CvInput extends Component {
     const {
       cv,
       onSubmit,
-      onInputGeneral,
-      educationFunctions,
-      workFunctions,
-      // onInputEducation,
-      // onNewEducation,
-      // onDeleteEducation,
-      // onInputWork,
-      // onNewWork,
-      // onDeleteWork,
-      
+      generalActions,
+      educationActions,
+      workActions,    
     }= this.props;
     return (
       <form className='cv-input' onSubmit={onSubmit}>
-          <General  general= {cv.general} onInput={onInputGeneral}/>
-          <EducationalExperiences educationArr={cv.educationArr} {...educationFunctions}/>
-          <WorkExperiences workArr={cv.workArr} {...workFunctions}/>
-          <button>Submit</button>
-        </form>
+        <General general={cv.general} {...generalActions}/>
+        <EducationalExperiences educationArr={cv.educationArr} {...educationActions}/>
+        <WorkExperiences workArr={cv.workArr} {...workActions}/>
+        <button>Submit</button>
+      </form>
     )
   }
 }
