@@ -19,10 +19,10 @@ class Education extends Component {
       <input value={info.titleOfStudy} onChange={(e) => onInput(e, info.id, 'titleOfStudy')}></input>
     </label>
     <label>Start Date:
-      <input type='number' value={info.startDate} onChange={(e) => onInput(e, info.id, 'startDate')}></input>
+      <input type='date' value={info.startDate} onChange={(e) => onInput(e, info.id, 'startDate')}></input>
     </label>
     <label>End Date:
-      <input type='number' value={info.endDate} onChange={(e) => onInput(e, info.id, 'endDate')}></input>
+      <input type='date' value={info.endDate} onChange={(e) => onInput(e, info.id, 'endDate')}></input>
     </label>
     <button type='button' onClick={() => onDelete(info.id)}>Delete</button>
   </fieldset>
